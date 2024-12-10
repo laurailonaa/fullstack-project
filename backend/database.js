@@ -25,8 +25,6 @@ db.serialize(() => {
     db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['blåa', 'sininen', 2, 2]);
     db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['röd', 'punainen', 2, 2]);
 
-
-
     // Insert new languages and tags into tables
     db.run('INSERT INTO languages (language) VALUES (?)', ['English']);
     db.run('INSERT INTO tags (tag) VALUES (?)', ['animals']);

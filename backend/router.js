@@ -1,19 +1,37 @@
 const express = require("express");
-// const { body, param, query, validationResult } = require("express-validator");
 const database = require("./database");
 const db = require("./dbfunctions");
 
 const wordsRouter = express.Router();
 
 // get all words
-wordsRouter.get('/', (req, res) => {
-    database.all('SELECT * FROM words', [], (err, rows) => {
-        if (err) {
-            throw err;
+wordsRouter.get("/", async (req, res) => {
+    try {
+        const { language, tag } = req.query;
+
+        const lang = language ? parseInt(language) : undefined;
+        const t = tag ? parseInt(tag) : undefined;
+
+        // for filtering the words
+        if (lang || t) {
+            const filterWords = await db.filterWords({
+                language: lang,
+                tag: t,
+            });
+            res.status(200).json(filterWords);
+            console.info("Fetched filtered data from database successfully.");
+            return;
         }
-        res.json(rows);
-    });
-})
+
+        const words = await db.findAll();
+        res.json(words);
+        console.info("Fetched data from database successfully.");
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "An error occured during fetching." });
+        return;
+    }
+});
 
 // get all languages
 wordsRouter.get('/languages', (req, res) => {

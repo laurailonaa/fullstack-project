@@ -1,6 +1,19 @@
 const db = require("./database");
 
+// Database functions that are used from http requests
 const functions = {
+    // Searches all words from the database
+    findAll: () => {
+        return new Promise((resolve, reject) => {
+            db.all('SELECT * FROM words', [], (err, rows) => {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve(rows);
+            });
+        });
+    },
+    // Save/post new data into the database
     save: (data) => {
         return new Promise((resolve, reject) => {
             const { foreign_word, finnish_word, language, tag } = data;
@@ -13,6 +26,7 @@ const functions = {
             });
         })
     },
+    // Searches specific data with its id
     findById: (id) => {
         return new Promise((resolve, reject) => {
             const searchId = "SELECT * FROM words WHERE id = ?";
@@ -25,6 +39,7 @@ const functions = {
             });
         });
     },
+    // Deletes specific data with its id
     deleteById: (id) => {
         return new Promise((resolve, reject) => {
             const deleteId = "DELETE FROM words WHERE id = ?";
@@ -37,6 +52,7 @@ const functions = {
             });
         });
     },
+    // Patches specific data with its id
     patchById: (id, update) => {
         return new Promise((resolve, reject) => {
             // make the SQL command based on which value is wanted to be updated
@@ -45,12 +61,12 @@ const functions = {
 
             if (update.foreign_word !== undefined) {
                 updateValues += "foreign_word = ?";
-                values.push(update.foreign_word); // "UPDATE locations SET foreign_word = ?"
+                values.push(update.foreign_word); // "UPDATE words SET foreign_word = ?"
             }
 
             if (update.finnish_word !== undefined) {
                 updateValues += ", finnish_word = ?";
-                values.push(update.finnish_word); // "UPDATE locations SET finnish_word = ?"
+                values.push(update.finnish_word); // "UPDATE words SET finnish_word = ?"
             }
 
             updateValues += " WHERE id = ?";
@@ -70,6 +86,33 @@ const functions = {
                     const updatedWord = values;
                     resolve(updatedWord);
                 });
+            });
+        });
+    },
+    // Filters words that appear in the frontend by using language and tag
+    filterWords: ({ language, tag }) => {
+        return new Promise((resolve, reject) => {
+            let query = "SELECT * FROM words WHERE ";
+            const values = [];
+
+            if (language) {
+                query += "language = ?";
+                values.push(language);
+            }
+
+            if (tag) {
+                if (values.length > 0) {
+                    query += " AND ";
+                }
+                query += "tag = ?";
+                values.push(tag);
+            }
+
+            db.all(query, values, (err, rows) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(rows);
             });
         });
     },

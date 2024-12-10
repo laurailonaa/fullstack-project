@@ -27,3 +27,7 @@ Content-Type: application/json
 }
 
 ###
+
+### FILTER to get specific data
+
+GET http://localhost:3000/api/words?language=1&tag=1

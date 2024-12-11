@@ -46,7 +46,7 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag }) {
     // function to delete words from the backend
     const deleteWords = async (word) => {
         try {
-            const apiUrl = `api/words/${word.id}`;
+            const apiUrl = `${import.meta.env.VITE_API_URL}api/words/${word.id}`;
             const response = await fetch(apiUrl, { method: 'DELETE' });
             if (!response.ok) {
                 console.error("A problem occured");
@@ -59,7 +59,7 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag }) {
     // function to update(patch) words from the backend
     const updateWords = async (word) => {
         try {
-            const apiUrl = `api/words/${word.id}`;
+            const apiUrl = `${import.meta.env.VITE_API_URL}api/words/${word.id}`;
             const response = await fetch(apiUrl, {
                 method: 'PATCH',
                 headers: {

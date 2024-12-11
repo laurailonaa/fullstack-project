@@ -29,7 +29,7 @@ function AdminSite() {
     // fetch words from the backend and filter them using current language and tag
     const fetchWords = async (currentLanguage, currentTag) => {
         try {
-            const apiUrl = `api/words?language=${currentLanguage}&tag=${currentTag}`;
+            const apiUrl = `${import.meta.env.VITE_API_URL}api/words?language=${currentLanguage}&tag=${currentTag}`;
             const hr = await fetch(apiUrl);
             const data = await hr.json();
             // change the state so words = fetched data
@@ -46,8 +46,8 @@ function AdminSite() {
     useEffect(() => {
         const fetchLanguageAndTag = async () => {
             try {
-                const fetchLanguages = await fetch('http://localhost:3000/api/words/languages');
-                const fetchTags = await fetch('http://localhost:3000/api/words/tags');
+                const fetchLanguages = await fetch(`${import.meta.env.VITE_API_URL}api/words/languages`);
+                const fetchTags = await fetch(`${import.meta.env.VITE_API_URL}api/words/tags`);
 
                 const languageData = await fetchLanguages.json();
                 const tagData = await fetchTags.json();
@@ -70,7 +70,7 @@ function AdminSite() {
     // post a new word to the backend
     const postWord = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/words', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}api/words`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ function App() {
 
   const fetchWords = async (currentLanguage, currentTag) => {
     try {
-      const apiUrl = `api/words?language=${currentLanguage}&tag=${currentTag}`;
+      const apiUrl = `${import.meta.env.VITE_API_URL}api/words?language=${currentLanguage}&tag=${currentTag}`;
       const hr = await fetch(apiUrl);
       const data = await hr.json();
       // change the state so words = fetched data
@@ -45,8 +45,8 @@ function App() {
   useEffect(() => {
     const fetchLanguageAndTag = async () => {
       try {
-        const fetchLanguages = await fetch('http://localhost:3000/api/words/languages');
-        const fetchTags = await fetch('http://localhost:3000/api/words/tags');
+        const fetchLanguages = await fetch(`${import.meta.env.VITE_API_URL}api/words/languages`);
+        const fetchTags = await fetch(`${import.meta.env.VITE_API_URL}api/words/tags`);
 
         const languageData = await fetchLanguages.json();
         const tagData = await fetchTags.json();

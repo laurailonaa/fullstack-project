@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import AdminSite from './AdminSite';
 
-function Filters({setCurrentLanguage, setCurrentTag, languages, tags, newWord, setNewWord}) {
+function Filters({setCurrentLanguage, setCurrentTag, currentLanguage, currentTag, languages, tags, newWord, setNewWord}) {
 
     return(
         <>
         <label>
                     Language:
                     <select
-                        value={newWord.language}
+                        value={currentLanguage}
                         onChange={(e) => {
                             const selectedLanguageId = parseInt(e.target.value);
                             setNewWord({ ...newWord, language: selectedLanguageId });
@@ -26,7 +26,7 @@ function Filters({setCurrentLanguage, setCurrentTag, languages, tags, newWord, s
                 <label>
                     Tag:
                     <select
-                        value={newWord.tag}
+                        value={currentTag}
                         onChange={(e) => {
                             const selectedTagId = parseInt(e.target.value);
                             setNewWord({ ...newWord, tag: selectedTagId });

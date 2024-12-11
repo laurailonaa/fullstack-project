@@ -6,15 +6,9 @@ import Filters from './Filters';
 import Words from './Words';
 
 function App() {
-  const [words, setWords] = useState([]);
+
   const [languages, setLanguages] = useState([]);
   const [tags, setTags] = useState([]);
-
-  // language is English (id number 1) by default
-  const [currentLanguage, setCurrentLanguage] = useState(1);
-
-  // tag is animals (id number 1) by default
-  const [currentTag, setCurrentTag] = useState(1);
 
   const [newWord, setNewWord] = useState({
     id: '',
@@ -24,6 +18,13 @@ function App() {
     tag: '',
   });
 
+  const [words, setWords] = useState([]);
+
+  // language is English (id number 1) by default
+  const [currentLanguage, setCurrentLanguage] = useState(1);
+
+  // tag is animals (id number 1) by default
+  const [currentTag, setCurrentTag] = useState(1);
 
   const fetchWords = async (currentLanguage, currentTag) => {
     try {

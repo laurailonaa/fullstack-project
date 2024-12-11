@@ -21,8 +21,10 @@ db.serialize(() => {
 
     db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['katt', 'kissa', 2, 1]);
     db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['hund', 'koira', 2, 1]);
+    db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['ko', 'lehmä', 2, 1]);
+    db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['mus', 'hiiri', 2, 1]);
 
-    db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['blåa', 'sininen', 2, 2]);
+    db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['blå', 'sininen', 2, 2]);
     db.run('INSERT INTO words (foreign_word, finnish_word, language, tag) VALUES (?, ?, ?, ?)', ['röd', 'punainen', 2, 2]);
 
     // Insert new languages and tags into tables

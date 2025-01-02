@@ -39,6 +39,19 @@ const functions = {
             });
         })
     },
+    // Save/post new tags into the database
+    saveTag: (data) => {
+        return new Promise((resolve, reject) => {
+            const { tag } = data;
+            const query = 'INSERT INTO tags (tag) VALUES (?)';
+            db.run(query, [tag], (err) => {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve({ tag });
+            });
+        })
+    },
     // Searches specific data with its id
     findById: (id) => {
         return new Promise((resolve, reject) => {

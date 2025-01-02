@@ -80,6 +80,19 @@ wordsRouter.post("/languages", async (req, res) => {
     }
 });
 
+// post a new tag
+wordsRouter.post("/tags", async (req, res) => {
+    try {
+        const tag = await db.saveTag(req.body);
+        res.status(201).json(tag);
+        console.info("Inserted new tag to database successfully.");
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occured during posting" });
+        return;
+    }
+});
+
 // delete by id
 wordsRouter.delete("/:myId", async (req, res) => {
     try {

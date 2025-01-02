@@ -6,6 +6,8 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
 
     const [newLanguage, setNewLanguage] = useState({language: ''});
 
+    const [newTag, setNewTag] = useState({tag: ''});
+
     const fetchWords = async (currentLanguage, currentTag) => {
         try {
             const apiUrl = `${import.meta.env.VITE_API_URL}api/words?language=${currentLanguage}&tag=${currentTag}`;
@@ -80,6 +82,35 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
         }
     };
 
+    // post a new tag to the backend
+    const postTag = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}api/words/tags`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTag),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const addedTag = await response.json();
+            setTags((prevTags) => [...prevTags, addedTag]);
+
+            setCurrentLanguage(addedTag.id);
+
+            await fetchLanguageAndTag();
+
+            // clear the input fields
+            setNewTag({ tag: '' });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <>
             <h1>Learn {currentLanguageName} - ADMIN</h1>
@@ -134,6 +165,18 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                         </label>
                         <br />
                         <button onClick={() => postLanguage()}>Add Language</button>
+
+                        <h2>Add a new tag</h2>
+                        <label>
+                            New tag:
+                            <input
+                                type="text"
+                                value={newTag.tag}
+                                onChange={(e) => setNewTag({ ...newTag, tag: e.target.value })}
+                            />
+                        </label>
+                        <br />
+                        <button onClick={() => postTag()}>Add Tag</button>
                     </>
                 )}
 

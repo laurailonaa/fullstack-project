@@ -26,6 +26,19 @@ const functions = {
             });
         })
     },
+    // Save/post new languages into the database
+    saveLang: (data) => {
+        return new Promise((resolve, reject) => {
+            const { language } = data;
+            const query = 'INSERT INTO languages (language) VALUES (?)';
+            db.run(query, [language], (err) => {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve({ language });
+            });
+        })
+    },
     // Searches specific data with its id
     findById: (id) => {
         return new Promise((resolve, reject) => {

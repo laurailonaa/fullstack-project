@@ -5,7 +5,7 @@ html {
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: rgb(221, 255, 204);
+  background-color: #F6E8B1;
 }
 
 .App {
@@ -13,13 +13,13 @@ body {
 }
 
 nav {
-  border-bottom: 3px solid;
+  border-bottom: 3px solid #39462f;
 }
 
 .navBar {
   top: 0;
   width: 100%;
-  background-color: rgb(177, 239, 191);
+  background-color: #B0CC99;
   padding: 10px 0;
 }
 
@@ -49,14 +49,14 @@ h1 {
 }
 
 button {
-  background-color: #ccf2f4;
-  border: 2px solid #4f504f;
+  background-color: #cce285;
+  border: 2px solid #5b6639;
   color: rgb(0, 0, 0);
-  padding: 5px 10px;
+  padding: 3px 10px;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
   width: 100px;
-  height: 40px;
+  height: 43px;
   margin-top: 8px;
   margin-bottom: 8px;
 }
@@ -69,6 +69,22 @@ button {
   padding: 5px;
 }
 
+.word-container button {
+  justify-content: right;
+  padding: 2px;
+  text-align: center;
+}
+
+.delete {
+  margin-left: 40px;
+  margin-bottom: 1px;
+}
+
+.update {
+  margin-left: 440px;
+  margin-top: 1px;
+}
+
 .word-card {
   padding: 10px 2px;
   border-radius: 5px;
@@ -76,8 +92,13 @@ button {
   height: 100px;
   width: 600px;
   margin: 5px auto;
-  border: 2px solid;
-  background-color: rgb(177, 239, 191);
+  border: 2px solid #39462f;
+  background-color: #B0CC99;
+}
+
+input {
+  font-size: 15px;
+  margin: 20px auto;
 }
 
 .word-card.correct {

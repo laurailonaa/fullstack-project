@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './App.css'
 
 
-function Words({ words, setWords, fetchWords, currentLanguage, currentTag }) {
+function Words({ words, setWords, fetchWords, currentLanguage, currentTag, randomArray }) {
 
     // use location to determine which parts of the return goes to both of the views or just either one
     const location = useLocation();
@@ -157,8 +157,8 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag }) {
 
                     {/** Display delete and update buttons only in admin view so user only gets the words itself */}
                     {location.pathname.includes("admin") && (
-                        <>  <button style={{ textAlign: 'center', padding: '5px', marginLeft: '50px' }} onClick={() => deleteWords(word)}>Delete word</button>
-                            <button style={{ marginLeft: '410px' }} onClick={() => updateWords(word)}>Update</button>
+                        <>  <button className="delete" onClick={() => deleteWords(word)}>Delete word</button>
+                            <button className="update" onClick={() => updateWords(word)}>Update</button>
                         </>
                     )}
                 </div>
@@ -167,6 +167,10 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag }) {
             {!location.pathname.includes("admin") && (
                 <>
                     <button onClick={(answerCheck)}>Check</button>
+                    <button onClick={() => {
+                        window.location.reload(false)
+                       setWords((prevWords) => randomArray(prevWords));
+                    }}>Retry</button>
                 </>
             )}
         </>

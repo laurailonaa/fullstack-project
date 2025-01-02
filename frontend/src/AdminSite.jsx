@@ -2,31 +2,10 @@ import { useEffect, useState } from 'react';
 import Filters from './Filters';
 import Words from './Words';
 
-function AdminSite() {
+function AdminSite({languages, setLanguages, tags, setTags, words, setWords, newWord, setNewWord, currentLanguage, setCurrentLanguage, currentTag, setCurrentTag, fetchLanguageAndTag, currentLanguageName, currentTagName, storeTag, storeLanguage}) {
 
-    // states for filtering data
-    const [languages, setLanguages] = useState([]);
-    const [tags, setTags] = useState([]);
+    const [newLanguage, setNewLanguage] = useState({language: ''});
 
-    // state is clear by default so when posting a new word it's set clear after that
-    const [newWord, setNewWord] = useState({
-        id: '',
-        foreign_word: '',
-        finnish_word: '',
-        language: '',
-        tag: '',
-    });
-
-    // state for showing words
-    const [words, setWords] = useState([]);
-
-    // language is English (id number 1) by default
-    const [currentLanguage, setCurrentLanguage] = useState(1);
-
-    // tag is animals (id number 1) by default
-    const [currentTag, setCurrentTag] = useState(1);
-
-    // fetch words from the backend and filter them using current language and tag
     const fetchWords = async (currentLanguage, currentTag) => {
         try {
             const apiUrl = `${import.meta.env.VITE_API_URL}api/words?language=${currentLanguage}&tag=${currentTag}`;
@@ -39,33 +18,10 @@ function AdminSite() {
     };
 
     useEffect(() => {
-        fetchWords(currentLanguage, currentTag);
+        if (currentLanguage && currentTag) {
+            fetchWords(currentLanguage, currentTag);
+        }
     }, [currentLanguage, currentTag]);
-
-    // fetch languages and tags from the backend every time when app mounts
-    useEffect(() => {
-        const fetchLanguageAndTag = async () => {
-            try {
-                const fetchLanguages = await fetch(`${import.meta.env.VITE_API_URL}api/words/languages`);
-                const fetchTags = await fetch(`${import.meta.env.VITE_API_URL}api/words/tags`);
-
-                const languageData = await fetchLanguages.json();
-                const tagData = await fetchTags.json();
-
-                setLanguages(languageData);
-                setTags(tagData);
-
-                setCurrentLanguage(languageData[0].id);
-                setCurrentTag(tagData[0].id);
-
-                setNewWord(prev => ({ ...prev, language: currentLanguage, tag: currentTag }));
-
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        fetchLanguageAndTag();
-    }, [])
 
     // post a new word to the backend
     const postWord = async () => {
@@ -95,11 +51,34 @@ function AdminSite() {
         }
     };
 
-    // filter which language and tag is currently in use by id so names will show in the frontend
-    // ChatGPT was code-consulted due pure confusion of how I could implement my thoughts of this
-    const currentLanguageName = languages.find(lang => lang.id === currentLanguage)?.language;
-    const currentTagName = tags.find(tag => tag.id === currentTag)?.tag;
+    // post a new language to the backend
+    const postLanguage = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}api/words/languages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newLanguage),
+            });
 
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const addedLanguage = await response.json();
+            setLanguages((prevLanguages) => [...prevLanguages, addedLanguage]);
+
+            setCurrentLanguage(addedLanguage.id);
+
+            await fetchLanguageAndTag();
+
+            // clear the input fields
+            setNewLanguage({ language: ''});
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
         <>
@@ -109,9 +88,9 @@ function AdminSite() {
                 {/** import filters so it can fetch words based on the language and tag that is shown in the frontend */}
                 <Filters
                     currentLanguage={currentLanguage}
-                    setCurrentLanguage={setCurrentLanguage}
+                    setCurrentLanguage={storeLanguage}
                     currentTag={currentTag}
-                    setCurrentTag={setCurrentTag}
+                    setCurrentTag={storeTag}
                     languages={languages}
                     tags={tags}
                     newWord={newWord}
@@ -129,7 +108,7 @@ function AdminSite() {
                             <input
                                 type="text"
                                 value={newWord.foreign_word}
-                                onChange={(e) => setNewWord({ ...newWord, foreign_word: e.target.value })}
+                                onChange={(e) => setNewWord({ ...newWord, foreign_word: e.target.value, language: currentLanguage, tag: currentTag, })}
                             />
                         </label>
                         <br />
@@ -138,17 +117,27 @@ function AdminSite() {
                             <input
                                 type="text"
                                 value={newWord.finnish_word}
-                                onChange={(e) => setNewWord({ ...newWord, finnish_word: e.target.value })}
+                                onChange={(e) => setNewWord({ ...newWord, finnish_word: e.target.value, language: currentLanguage, tag: currentTag, })}
                             />
                         </label>
                         <br />
                         <button onClick={() => postWord()}>Add Word</button>
 
-
+                        <h2>Add a new language</h2>
+                        <label>
+                            New language:
+                            <input
+                                type="text"
+                                value={newLanguage.language}
+                                onChange={(e) => setNewLanguage({ ...newLanguage, language: e.target.value })}
+                            />
+                        </label>
+                        <br />
+                        <button onClick={() => postLanguage()}>Add Language</button>
                     </>
                 )}
 
-            {/** display words based on filtering in the user or admin view */}
+            {/** display words based on filtering in the user and admin view */}
             <Words words={words} setWords={setWords} fetchWords={fetchWords} currentLanguage={currentLanguage} currentTag={currentTag}/>
             </div >
         </>

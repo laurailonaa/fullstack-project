@@ -9,10 +9,11 @@ wordsRouter.get("/", async (req, res) => {
     try {
         const { language, tag } = req.query;
 
+        // if language or tag exist in the query, get the number, otherwise make it undefined
         const lang = language ? parseInt(language) : undefined;
         const t = tag ? parseInt(tag) : undefined;
 
-        // for filtering the words
+        // for filtering the words if language or tag exists
         if (lang || t) {
             const filterWords = await db.filterWords({
                 language: lang,
@@ -66,7 +67,20 @@ wordsRouter.post("/", async (req, res) => {
     }
 });
 
-// DELETE BY ID
+// post a new language
+wordsRouter.post("/languages", async (req, res) => {
+    try {
+        const language = await db.saveLang(req.body);
+        res.status(201).json(language);
+        console.info("Inserted new language to database successfully.");
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occured during posting" });
+        return;
+    }
+});
+
+// delete by id
 wordsRouter.delete("/:myId", async (req, res) => {
     try {
         const id = parseInt(req.params.myId);
@@ -87,7 +101,7 @@ wordsRouter.delete("/:myId", async (req, res) => {
     }
 });
 
-// PATCH EXISTING WORD
+// patch/update existing word
 wordsRouter.patch("/:myId", async (req, res) => {
     try {
         const id = parseInt(req.params.myId);

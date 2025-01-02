@@ -35,4 +35,8 @@ db.serialize(() => {
     db.run('INSERT INTO tags (tag) VALUES (?)', ['colors']);
 })
 
+// now when the language app starts, there are two languages and tags by default, where both languages
+// have four words in animals tag and two words in colors tag
+// admin can add new words to the desired tag and language in the frontend
+
 module.exports = db;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import AdminSite from './AdminSite';
 
 function Filters({setCurrentLanguage, setCurrentTag, currentLanguage, currentTag, languages, tags, newWord, setNewWord}) {
 

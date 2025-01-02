@@ -12,6 +12,15 @@ Content-Type: application/json
 
 ###
 
+# POST a new language
+
+post http://localhost:3000/api/words/languages/
+Content-Type: application/json
+
+{ "language": "German"}
+
+###
+
 # DELETE a word by ID
 DELETE http://localhost:3000/api/words/1
 
@@ -28,6 +37,6 @@ Content-Type: application/json
 
 ###
 
-### FILTER to get specific data
+# FILTER to get specific data
 
 GET http://localhost:3000/api/words?language=1&tag=1

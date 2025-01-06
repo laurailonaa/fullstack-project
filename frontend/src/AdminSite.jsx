@@ -138,8 +138,37 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                 {/** includes add words/languages/tags -part only to the admin view */}
                 {location.pathname.includes("admin") && (
                     <>
+                    <div className="languageAndTag">
+                    <div className="newLanguage">
+                        <h2>Add a new language</h2>
+                        <label>
+                            New language:
+                            <input
+                                type="text"
+                                value={newLanguage.language}
+                                onChange={(e) => setNewLanguage({ ...newLanguage, language: e.target.value })}
+                            />
+                        </label>
+                        <br />
+                        <button onClick={() => postLanguage()}>Add Language</button>
+                    </div>
 
-                        <h2>Add a new word </h2>
+                    <div className="newTag">
+                        <h2>Add a new tag</h2>
+                        <label>
+                            New tag:
+                            <input
+                                type="text"
+                                value={newTag.tag}
+                                onChange={(e) => setNewTag({ ...newTag, tag: e.target.value })}
+                            />
+                        </label>
+                        <br />
+                        <button onClick={() => postTag()}>Add Tag</button>
+                    </div>
+                    </div>
+
+                        <h2>Add a new {currentLanguageName} word </h2>
                         <h3>Current theme: {currentTagName}</h3>
                         <label>
                             {currentLanguageName}:
@@ -161,34 +190,12 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                         <br />
                         <button onClick={() => postWord()}>Add Word</button>
 
-                        <h2>Add a new language</h2>
-                        <label>
-                            New language:
-                            <input
-                                type="text"
-                                value={newLanguage.language}
-                                onChange={(e) => setNewLanguage({ ...newLanguage, language: e.target.value })}
-                            />
-                        </label>
-                        <br />
-                        <button onClick={() => postLanguage()}>Add Language</button>
-
-                        <h2>Add a new tag</h2>
-                        <label>
-                            New tag:
-                            <input
-                                type="text"
-                                value={newTag.tag}
-                                onChange={(e) => setNewTag({ ...newTag, tag: e.target.value })}
-                            />
-                        </label>
-                        <br />
-                        <button onClick={() => postTag()}>Add Tag</button>
                     </>
                 )}
 
             {/** display words based on filtering in the user AND admin view */}
             <Words words={words} setWords={setWords} fetchWords={fetchWords} currentLanguage={currentLanguage} currentTag={currentTag}/>
+
             </div >
         </>
     )

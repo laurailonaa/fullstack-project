@@ -174,7 +174,9 @@ function User() {
                                                                 currentTagName={currentTagName} />} />
                         </Routes>
                     </div>
-
+                    <div className="footer">
+                        <p>© Laura Shemeikka 2025</p>
+                    </div>
                 </div>
             </BrowserRouter>
         </>

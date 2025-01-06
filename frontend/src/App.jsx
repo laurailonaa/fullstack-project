@@ -1,10 +1,9 @@
 import User from './User';
 import './App.css';
 
-
-// user view of the app
 function App() {
 
+  // starting view is the user view of the app
   return (
     <User />
   )

@@ -9,7 +9,7 @@ wordsRouter.get("/", async (req, res) => {
     try {
         const { language, tag } = req.query;
 
-        // if language or tag exist in the query, get the number, otherwise make it undefined
+        // if language or tag exist in the query, get the number(id), otherwise make it undefined
         const lang = language ? parseInt(language) : undefined;
         const t = tag ? parseInt(tag) : undefined;
 

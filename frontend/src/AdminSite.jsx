@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import Filters from './Filters';
 import Words from './Words';
 
+// imported props from user view which are used in admin view too
 function AdminSite({languages, setLanguages, tags, setTags, words, setWords, newWord, setNewWord, currentLanguage, setCurrentLanguage, currentTag, setCurrentTag, fetchLanguageAndTag, currentLanguageName, currentTagName, storeTag, storeLanguage}) {
 
+    // states for adding new languages and tags
     const [newLanguage, setNewLanguage] = useState({language: ''});
-
     const [newTag, setNewTag] = useState({tag: ''});
 
+    // fetch words from the backend without the shuffle
     const fetchWords = async (currentLanguage, currentTag) => {
         try {
             const apiUrl = `${import.meta.env.VITE_API_URL}api/words?language=${currentLanguage}&tag=${currentTag}`;
@@ -19,6 +21,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
         catch (err) { console.error(err); }
     };
 
+    // when current language or tag is changed and they exist, fetch words again
     useEffect(() => {
         if (currentLanguage && currentTag) {
             fetchWords(currentLanguage, currentTag);
@@ -41,6 +44,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
             }
 
             const addedWord = await response.json();
+            // set words as the previous words and the added word
             setWords((prevWords) => [...prevWords, addedWord]);
 
             // fetch words again so the existing word list in the frontend gets updated right away
@@ -69,10 +73,12 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
             }
 
             const addedLanguage = await response.json();
+            // set languages as the previous ones and add the new one to the list
             setLanguages((prevLanguages) => [...prevLanguages, addedLanguage]);
 
             setCurrentLanguage(addedLanguage.id);
 
+            // fetch languages and tags again
             await fetchLanguageAndTag();
 
             // clear the input fields
@@ -98,6 +104,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
             }
 
             const addedTag = await response.json();
+            // set tags as the previous ones and add the new one to the list
             setTags((prevTags) => [...prevTags, addedTag]);
 
             setCurrentLanguage(addedTag.id);
@@ -128,7 +135,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                     setNewWord={setNewWord}
                 />
 
-                {/** includes add words -part only to the admin view */}
+                {/** includes add words/languages/tags -part only to the admin view */}
                 {location.pathname.includes("admin") && (
                     <>
 
@@ -180,7 +187,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                     </>
                 )}
 
-            {/** display words based on filtering in the user and admin view */}
+            {/** display words based on filtering in the user AND admin view */}
             <Words words={words} setWords={setWords} fetchWords={fetchWords} currentLanguage={currentLanguage} currentTag={currentTag}/>
             </div >
         </>

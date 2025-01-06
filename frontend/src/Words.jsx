@@ -2,20 +2,25 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import './App.css'
 
-
+// component to show word pairs from the backend
 function Words({ words, setWords, fetchWords, currentLanguage, currentTag, randomArray }) {
 
     // use location to determine which parts of the return goes to both of the views or just either one
+    // (user or admin only)
     const location = useLocation();
 
+    // if word pairs are foreign-finnish or finnish-foreign
     const [reversed, isReversed] = useState(false);
 
+    // state for result of the word quiz
     const [result, setResult] = useState(0);
 
+    // when clicked, state changes to true
     const reversedClick = () => {
         isReversed((prev) => !prev);
     }
 
+    // function to handle user input
     const handleInput = (wordId, value) => {
         setWords((prevWords) =>
             prevWords.map((w) =>
@@ -24,10 +29,12 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
         )
     }
 
+    // function to check how many inputs were correct
     const answerCheck = () => {
         let count = 0;
         const updateWords =
             words.map((word) => {
+                // if the input matches its pair in the backend, add 1 point to the count
                 const isCorrect =
                     (!reversed && word.input === word.finnish_word) ||
                     (reversed && word.input === word.foreign_word);
@@ -83,12 +90,14 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
     return (
         <>
         <div className="reverse">
+                {/** reverse button is only shown in the user view */}
                 {!location.pathname.includes("admin") && (
                     <>
                     <button onClick={(reversedClick)}>Reverse</button>
                     </>
                 )}
         </div>
+
         {/** maps the words array and makes text input fields from both foreign and finnish words */}
 
             <div className="word-container">
@@ -164,6 +173,7 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
                 </div>
             ))}
         </div>
+            {/** Check and retry buttons are only shown in user view */}
             {!location.pathname.includes("admin") && (
                 <>
                     <button onClick={(answerCheck)}>Check</button>

@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
-import AdminSite from './AdminSite';
 import './App.css';
+import AdminSite from './AdminSite';
 import Filters from './Filters';
 import Words from './Words';
 
 // user view of the app
 function User() {
 
+    // states for languages and tags
     const [languages, setLanguages] = useState([]);
     const [tags, setTags] = useState([]);
 
+    // state for adding new words
     const [newWord, setNewWord] = useState({
         id: '',
         foreign_word: '',
@@ -19,6 +21,7 @@ function User() {
         tag: '',
     });
 
+    // state for words
     const [words, setWords] = useState([]);
 
     // language is English (id number 1) by default
@@ -35,12 +38,14 @@ function User() {
         setCurrentTag(tagId);
     }
 
+    // fetch words from the backend
     const fetchWords = async (currentLanguage, currentTag) => {
         try {
             const apiUrl = `${import.meta.env.VITE_API_URL}api/words?language=${currentLanguage}&tag=${currentTag}`;
             const hr = await fetch(apiUrl);
             const data = await hr.json();
 
+            // make words order shuffle so it's not the same every time
             const dataShuffled = randomArray(data);
 
             setWords(dataShuffled);
@@ -48,7 +53,8 @@ function User() {
         catch (err) { console.error(err); }
     };
 
-    //chat gpt
+    // when languages and/or tags state change, set the initial
+    // value to English and animals
     useEffect(() => {
         if (languages.length > 0){
             setCurrentLanguage(languages[0].id);
@@ -60,13 +66,15 @@ function User() {
 
     }, [languages, tags]);
 
+    // if current language or tag changes and they exist, fetch words again
+    // so the interface only shows wanted vocabulary
     useEffect(() => {
         if (currentLanguage && currentTag) {
             fetchWords(currentLanguage, currentTag);
         }
     }, [currentLanguage, currentTag]);
 
-    // fetch languages and tags from the backend every time when app mounts
+    // fetch languages and tags from the backend
     const fetchLanguageAndTag = async () => {
         try {
             const fetchLanguages = await fetch(`${import.meta.env.VITE_API_URL}api/words/languages`);
@@ -78,6 +86,7 @@ function User() {
             setLanguages(languageData);
             setTags(tagData);
 
+            // set current language and tag to the default (English and animals)
             setCurrentLanguage(languageData[0].id);
             setCurrentTag(tagData[0].id);
 
@@ -86,26 +95,31 @@ function User() {
         }
     };
 
+    // fetch languages and tags every time app mounts
     useEffect(() => {
         fetchLanguageAndTag();
     }, []);
 
+    // find the name of the current language and tag by going through the arrays
+    // so the id is matching current id
     const currentLanguageName = languages.find(lang => lang.id === currentLanguage)?.language;
     const currentTagName = tags.find(tag => tag.id === currentTag)?.tag;
 
+    // making the words appear shuffled in the user view for diversity of app's use
     const randomArray = (array) => {
         // copying the array just in case so the original stays unharmed
         const copyArray = [...array];
+        // making the words appear in random order in the user view (by id)
         for (let i = copyArray.length - 1; i > 0; i--) {
             const randomIndex = Math.floor(Math.random() * (i + 1));
             [copyArray[i], copyArray[randomIndex]] = [copyArray[randomIndex], copyArray[i]];
         }
+        // returning the array and words are mapped in random order
         return copyArray.map((word) => ({ ...word }));
     }
 
     return (
         <>
-
             <BrowserRouter>
                 <div className="App">
 

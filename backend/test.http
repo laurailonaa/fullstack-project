@@ -1,11 +1,11 @@
 # GET all words
-GET http://localhost:3000/api/words/tags
+GET http://localhost:3000/api/words/
 
 ###
 
 # POST a new word
 
-post http://localhost:3000/api/words/
+POST http://localhost:3000/api/words/
 Content-Type: application/json
 
 { "foreign_word": "dog", "finnish_word": "koira", "language": 1, "tag": 1}
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 # POST a new language
 
-post http://localhost:3000/api/words/tags/
+POST http://localhost:3000/api/words/tags/
 Content-Type: application/json
 
 { "tag": "vehicles"}

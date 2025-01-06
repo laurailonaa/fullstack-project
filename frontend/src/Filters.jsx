@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 
 function Filters({setCurrentLanguage, setCurrentTag, currentLanguage, currentTag, languages, tags, newWord, setNewWord}) {
 
+    // make option bars for language and tag and filter words based on
+    // which language and tag is selected (by id)
+
     return(
         <>
         <label>

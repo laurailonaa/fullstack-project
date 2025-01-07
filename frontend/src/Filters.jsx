@@ -7,6 +7,7 @@ function Filters({setCurrentLanguage, setCurrentTag, currentLanguage, currentTag
 
     return(
         <>
+        <div className="optionBars">
         <label>
                     Language:
                     <select
@@ -42,6 +43,7 @@ function Filters({setCurrentLanguage, setCurrentTag, currentLanguage, currentTag
                     </select>
 
                 </label>
+            </div>
         </>
     );
 }

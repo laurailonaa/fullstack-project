@@ -3,22 +3,14 @@ import { useLocation } from 'react-router-dom';
 import './App.css'
 
 // component to show word pairs from the backend
-function Words({ words, setWords, fetchWords, currentLanguage, currentTag, randomArray }) {
+function Words({ words, setWords, fetchWords, currentLanguage, currentTag, randomArray, reversed, isReversed, reversedClick, start, setStart}) {
 
     // use location to determine which parts of the return goes to both of the views or just either one
     // (user or admin only)
     const location = useLocation();
 
-    // if word pairs are foreign-finnish or finnish-foreign
-    const [reversed, isReversed] = useState(false);
-
     // state for result of the word quiz
     const [result, setResult] = useState(0);
-
-    // when clicked, state changes to true
-    const reversedClick = () => {
-        isReversed((prev) => !prev);
-    }
 
     // function to handle user input
     const handleInput = (wordId, value) => {
@@ -36,8 +28,8 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
             words.map((word) => {
                 // if the input matches its pair in the backend, add 1 point to the count
                 const isCorrect =
-                    (!reversed && word.input === word.finnish_word) ||
-                    (reversed && word.input === word.foreign_word);
+                    (!reversed && word.input === word.foreign_word) ||
+                    (reversed && word.input === word.finnish_word);
 
                 if (isCorrect) {
                     count += 1;
@@ -91,7 +83,7 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
         <>
         <div className="reverse">
                 {/** reverse button is only shown in the user view */}
-                {!location.pathname.includes("admin") && (
+                {!location.pathname.includes("admin") && !start && (
                     <>
                     <button onClick={(reversedClick)}>Reverse</button>
                     </>
@@ -114,19 +106,6 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
                         <>
                             <input
                                 type="text"
-                                value={word.foreign_word}
-                                onChange={(e) => {
-                                    const newValue = e.target.value;
-                                    setWords((prevWords) =>
-                                        prevWords.map((w) =>
-                                            w.id === word.id ? { ...w, foreign_word: newValue } : w
-                                        )
-                                    )
-                                }}
-                            />
-                            <span> = </span>
-                            <input
-                                type="text"
                                 value={word.finnish_word}
                                 onChange={(e) => {
                                     const newValue = e.target.value;
@@ -137,10 +116,23 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
                                     )
                                 }}
                             />
+                            <span> = </span>
+                            <input
+                                type="text"
+                                value={word.foreign_word}
+                                onChange={(e) => {
+                                    const newValue = e.target.value;
+                                    setWords((prevWords) =>
+                                        prevWords.map((w) =>
+                                            w.id === word.id ? { ...w, foreign_word: newValue } : w
+                                        )
+                                    )
+                                }}
+                            />
                         </>
                     ) : reversed ? (
                         <>
-                        <strong>{word.finnish_word}</strong>
+                        <strong>{word.foreign_word}</strong>
                         <span> = </span>
                             <input
                                 type="text"
@@ -153,7 +145,7 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
                     ) : (
 
                         <>
-                            <strong>{word.foreign_word}</strong>
+                            <strong>{word.finnish_word}</strong>
                             <span> = </span>
                             <input
                                 type="text"
@@ -166,7 +158,8 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
 
                     {/** Display delete and update buttons only in admin view so user only gets the words itself */}
                     {location.pathname.includes("admin") && (
-                        <>  <button className="delete" onClick={() => deleteWords(word)}>Delete word</button>
+                        <>
+                            <button className="delete" onClick={() => deleteWords(word)}>Delete word</button>
                             <button className="update" onClick={() => updateWords(word)}>Update</button>
                         </>
                     )}
@@ -174,13 +167,15 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
             ))}
         </div>
             {/** Check and retry buttons are only shown in user view */}
-            {!location.pathname.includes("admin") && (
+            {!location.pathname.includes("admin") && start && (
                 <>
+                <div className='checkAndRetry'>
                     <button onClick={(answerCheck)}>Check</button>
                     <button onClick={() => {
                         window.location.reload(false)
                        setWords((prevWords) => randomArray(prevWords));
                     }}>Retry</button>
+                </div>
                 </>
             )}
         </>

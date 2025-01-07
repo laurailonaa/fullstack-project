@@ -103,10 +103,12 @@ input {
 
 .word-card.correct {
   background-color: rgb(134, 214, 134);
+  border: solid 3px rgb(45, 91, 50);
 }
 
 .word-card.incorrect {
   background-color: rgb(218, 104, 104);
+  border: solid 3px rgb(122, 58, 58);
 }
 
 .languageAndTag {
@@ -120,9 +122,31 @@ input {
   padding: 5px;
 }
 
+.checkAndRetry {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 3px;
+  padding: 5px;
+}
+
+.start button {
+  margin-top: 10px;
+  background-color: #fff239;
+  border: 2px solid #7b7508;
+}
+
 .footer {
   padding: 2px 5px;
   background-color: #B0CC99;
   border-top: 3px solid #54604a;
   margin-top: 15px;
+}
+
+.optionBars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 3px;
+  padding: 5px;
 }

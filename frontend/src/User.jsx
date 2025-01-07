@@ -30,12 +30,23 @@ function User() {
     // tag is animals (id number 1) by default
     const [currentTag, setCurrentTag] = useState(1);
 
+    //state to determine whether the quiz is on/off
+    const [start, setStart] = useState(false);
+
     const storeLanguage = (languageId) => {
         setCurrentLanguage(languageId);
     }
 
     const storeTag = (tagId) => {
         setCurrentTag(tagId);
+    }
+
+    // if word pairs are foreign-finnish or finnish-foreign
+    const [reversed, isReversed] = useState(false);
+
+    // when clicked, state changes to true
+    const reversedClick = () => {
+        isReversed((prev) => !prev);
     }
 
     // fetch words from the backend
@@ -102,7 +113,8 @@ function User() {
 
     // find the name of the current language and tag by going through the arrays
     // so the id is matching current id
-    const currentLanguageName = languages.find(lang => lang.id === currentLanguage)?.language;
+    // if the word-pairs are reversed, currentLanguageName is Finnish
+    const currentLanguageName = reversed ? "Finnish" : languages.find(lang => lang.id === currentLanguage)?.language;
     const currentTagName = tags.find(tag => tag.id === currentTag)?.tag;
 
     // making the words appear shuffled in the user view for diversity of app's use
@@ -116,6 +128,11 @@ function User() {
         }
         // returning the array and words are mapped in random order
         return copyArray.map((word) => ({ ...word }));
+    }
+
+    const startQuiz = () => {
+        setStart(true);
+        setWords((prev) => randomArray(prev));
     }
 
     return (
@@ -140,8 +157,11 @@ function User() {
                             <Route path="/" element={
                                 <>
 
-                                    <h1>Learn {currentLanguageName}!</h1>
-                                    <p>Current theme: {currentTagName}</p>
+                                    <h1>Learn {reversed ? "Finnish" : currentLanguageName}!</h1>
+                                    <p>Write the {reversed ? "Finnish definition" : "foreign definition"} to the words. Change the language or theme from the option bar below.</p>
+                                    <p>Check your answers by pressing the check button. You can also try again by pressing the retry button.</p>
+
+                                    <strong><p>Current theme: {currentTagName}</p></strong>
                                     <Filters
                                         currentLanguage={currentLanguage}
                                         setCurrentLanguage={storeLanguage}
@@ -152,7 +172,11 @@ function User() {
                                         newWord={newWord}
                                         setNewWord={setNewWord}
                                     />
-                                    {<Words words={words} setWords={setWords} randomArray={randomArray} />}
+                                <div className="start">
+                                        {!start && <button onClick={(startQuiz)}>Start quiz</button>}
+                                </div>
+
+                                    {<Words words={words} setWords={setWords} randomArray={randomArray} reversed={reversed} isReversed={isReversed} reversedClick={reversedClick} start={start} setStart={setStart}/>}
                                 </>} />
                             <Route path="admin/*" element={<AdminSite
                                                                 languages={languages}

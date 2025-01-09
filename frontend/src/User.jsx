@@ -33,6 +33,7 @@ function User() {
     //state to determine whether the quiz is on/off
     const [start, setStart] = useState(false);
 
+    // these will synchronize current language and tag visible in both user and admin view at the time
     const storeLanguage = (languageId) => {
         setCurrentLanguage(languageId);
     }
@@ -46,7 +47,7 @@ function User() {
 
     // when clicked, state changes to true
     const reversedClick = () => {
-        isReversed((prev) => !prev);
+        isReversed((list) => !list);
     }
 
     // fetch words from the backend
@@ -63,19 +64,6 @@ function User() {
         }
         catch (err) { console.error(err); }
     };
-
-    // when languages and/or tags state change, set the initial
-    // value to English and animals
-    useEffect(() => {
-        if (languages.length > 0){
-            setCurrentLanguage(languages[0].id);
-        }
-
-        if (tags.length > 0) {
-            setCurrentTag(tags[0].id);
-        }
-
-    }, [languages, tags]);
 
     // if current language or tag changes and they exist, fetch words again
     // so the interface only shows wanted vocabulary
@@ -97,10 +85,6 @@ function User() {
             setLanguages(languageData);
             setTags(tagData);
 
-            // set current language and tag to the default (English and animals)
-            setCurrentLanguage(languageData[0].id);
-            setCurrentTag(tagData[0].id);
-
         } catch (err) {
             console.error(err);
         }
@@ -121,15 +105,12 @@ function User() {
     const randomArray = (array) => {
         // copying the array just in case so the original stays unharmed
         const copyArray = [...array];
-        // making the words appear in random order in the user view (by id)
-        for (let i = copyArray.length - 1; i > 0; i--) {
-            const randomIndex = Math.floor(Math.random() * (i + 1));
-            [copyArray[i], copyArray[randomIndex]] = [copyArray[randomIndex], copyArray[i]];
-        }
-        // returning the array and words are mapped in random order
-        return copyArray.map((word) => ({ ...word }));
+        // making the words appear in random order by using sort and Math.random()
+        // randomizing the array between values [-0.5, 0.5]
+        return copyArray.sort(() => Math.random() - 0.5);
     }
 
+    // starts the quiz, makes start button disappear by changing the state and randomizing the word order
     const startQuiz = () => {
         setStart(true);
         setWords((prev) => randomArray(prev));
@@ -176,7 +157,8 @@ function User() {
                                         {!start && <button onClick={(startQuiz)}>Start quiz</button>}
                                 </div>
 
-                                    {<Words words={words} setWords={setWords} randomArray={randomArray} reversed={reversed} isReversed={isReversed} reversedClick={reversedClick} start={start} setStart={setStart}/>}
+                                {<Words words={words} setWords={setWords} randomArray={randomArray} reversed={reversed} isReversed={isReversed} reversedClick={reversedClick} start={start} setStart={setStart}/>}
+
                                 </>} />
                             <Route path="admin/*" element={<AdminSite
                                                                 languages={languages}
@@ -198,9 +180,11 @@ function User() {
                                                                 currentTagName={currentTagName} />} />
                         </Routes>
                     </div>
+
                     <div className="footer">
                         <p>© Laura Shemeikka 2025</p>
                     </div>
+
                 </div>
             </BrowserRouter>
         </>

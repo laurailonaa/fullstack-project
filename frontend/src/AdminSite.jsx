@@ -76,8 +76,6 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
             // set languages as the previous ones and add the new one to the list
             setLanguages((prevLanguages) => [...prevLanguages, addedLanguage]);
 
-            setCurrentLanguage(addedLanguage.id);
-
             // fetch languages and tags again
             await fetchLanguageAndTag();
 
@@ -106,8 +104,6 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
             const addedTag = await response.json();
             // set tags as the previous ones and add the new one to the list
             setTags((prevTags) => [...prevTags, addedTag]);
-
-            setCurrentLanguage(addedTag.id);
 
             await fetchLanguageAndTag();
 
@@ -146,7 +142,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                             <input
                                 type="text"
                                 value={newLanguage.language}
-                                onChange={(e) => setNewLanguage({ ...newLanguage, language: e.target.value })}
+                                onChange={(e) => setNewLanguage({ language: e.target.value })}
                             />
                         </label>
                         <br />
@@ -160,7 +156,7 @@ function AdminSite({languages, setLanguages, tags, setTags, words, setWords, new
                             <input
                                 type="text"
                                 value={newTag.tag}
-                                onChange={(e) => setNewTag({ ...newTag, tag: e.target.value })}
+                                onChange={(e) => setNewTag({ tag: e.target.value })}
                             />
                         </label>
                         <br />

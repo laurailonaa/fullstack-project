@@ -5,6 +5,8 @@ function Filters({setCurrentLanguage, setCurrentTag, currentLanguage, currentTag
     // make option bars for language and tag and filter words based on
     // which language and tag is selected (by id)
 
+    // ChatGPT was consulted with currentLanguage and currentTag functionality
+
     return(
         <>
         <div className="optionBars">

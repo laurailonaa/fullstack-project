@@ -22,9 +22,10 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
     }
 
     // function to check how many inputs were correct
+    // AI consulted tips of the implementation
     const answerCheck = () => {
         let count = 0;
-        const updateWords =
+        const checkWords =
             words.map((word) => {
                 // if the input matches its pair in the backend, add 1 point to the count
                 const isCorrect =
@@ -37,7 +38,7 @@ function Words({ words, setWords, fetchWords, currentLanguage, currentTag, rando
                 return { ...word, isCorrect };
             });
 
-        setWords(updateWords);
+        setWords(checkWords);
         setResult(count);
         alert(`You got ${count} out of ${words.length} right!`);
     }

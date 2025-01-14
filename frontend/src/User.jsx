@@ -33,7 +33,9 @@ function User() {
     //state to determine whether the quiz is on/off
     const [start, setStart] = useState(false);
 
+
     // these will synchronize current language and tag visible in both user and admin view at the time
+    // AI consulted solution
     const storeLanguage = (languageId) => {
         setCurrentLanguage(languageId);
     }
@@ -98,10 +100,12 @@ function User() {
     // find the name of the current language and tag by going through the arrays
     // so the id is matching current id
     // if the word-pairs are reversed, currentLanguageName is Finnish
+    // AI consulted solution
     const currentLanguageName = reversed ? "Finnish" : languages.find(lang => lang.id === currentLanguage)?.language;
     const currentTagName = tags.find(tag => tag.id === currentTag)?.tag;
 
     // making the words appear shuffled in the user view for diversity of app's use
+    // AI consulted tips
     const randomArray = (array) => {
         // copying the array just in case so the original stays unharmed
         const copyArray = [...array];
